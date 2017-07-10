@@ -1,0 +1,265 @@
+#######VIEWS
+
+default_view:
+  view: yes
+  entities:
+    - group.controls
+    - group.living_tv
+    - device_tracker.ryanphone_ryanphone
+    - device_tracker.lizphone_lizphone
+    - group.ecobee
+    - group.outside_lights
+    - group.living_room_lights
+    - group.bedroom_lights
+    - group.kitchen_lights
+    - group.alarm_clock
+    - group.batteries
+    - group.links
+
+security_view:
+  name: Security
+  view: yes
+  entities:
+    - group.door_windows
+    - group.tampers
+    - camera.amcrest_camera
+
+media:
+  view: yes
+  entities:
+    - media_player.family_room
+    - media_player.master_bedroom
+    - media_player.garage
+
+energy:
+  name: Energy
+  view: yes
+  entities: group.energy_used
+
+climate_view:
+  name: Climate
+  view: yes
+  entities: 
+  - group.ecobee
+  - group.bloomdata
+
+admin:
+  name: Admin
+  icon: mdi:settings
+  view: yes
+  entities: 
+    - group.automation
+    - group.multisensor_6
+    - group.smart_switch
+    - group.scripts
+    - group.server_info
+
+#####Groups
+energy_used:
+  name: Energy Usage
+  entities:
+    - sensor.aeotec_dsb09104_home_energy_meter_energy_13_0
+    - sensor.aeotec_dsb09104_home_energy_meter_energy_13_0_2
+    - sensor.aeotec_dsb09104_home_energy_meter_energy_13_0_3
+    - sensor.aeotec_dsb09104_home_energy_meter_exporting_13_32
+    - sensor.aeotec_dsb09104_home_energy_meter_exporting_13_32_2
+    - sensor.aeotec_dsb09104_home_energy_meter_exporting_13_32_3
+    - sensor.aeotec_dsb09104_home_energy_meter_interval_13_2
+    - sensor.aeotec_dsb09104_home_energy_meter_interval_13_2_2
+    - sensor.aeotec_dsb09104_home_energy_meter_interval_13_2_3
+    - sensor.aeotec_dsb09104_home_energy_meter_interval_13_10_2
+    - sensor.aeotec_dsb09104_home_energy_meter_power_13_4
+    - sensor.aeotec_dsb09104_home_energy_meter_power_13_4_2
+    - sensor.aeotec_dsb09104_home_energy_meter_power_13_4_3
+    - sensor.aeotec_dsb09104_home_energy_meter_power_13_8
+    - sensor.aeotec_dsb09104_home_energy_meter_power_13_8_2
+    - sensor.aeotec_dsb09104_home_energy_meter_power_13_8_3
+    - sensor.aeotec_dsb09104_home_energy_meter_previous_reading_13_1
+    - sensor.aeotec_dsb09104_home_energy_meter_previous_reading_13_1_2
+    - sensor.aeotec_dsb09104_home_energy_meter_previous_reading_13_1_3
+    - sensor.aeotec_dsb09104_home_energy_meter_previous_reading_13_9_2
+
+multisensor_6:
+  name: Multisensor 6
+  entities:
+    - binary_sensor.aeotec_zw100_multisensor_6_sensor_19_0
+    - sensor.aeotec_zw100_multisensor_6_alarm_level_19_1
+    - sensor.aeotec_zw100_multisensor_6_alarm_type_19_0
+    - sensor.aeotec_zw100_multisensor_6_burglar_19_10
+    - sensor.aeotec_zw100_multisensor_6_luminance_19_3
+    - sensor.aeotec_zw100_multisensor_6_relative_humidity_19_5
+    - sensor.aeotec_zw100_multisensor_6_sourcenodeid_19_2
+    - sensor.aeotec_zw100_multisensor_6_temperature_19_1
+    - sensor.aeotec_zw100_multisensor_6_ultraviolet_19_27
+    - zwave.aeotec_zw100_multisensor_6_19
+
+smart_switch:
+  name: Smart Switch
+  entities:
+    - sensor.aeotec_zw096_smart_switch_6_current_20_20
+    - sensor.aeotec_zw096_smart_switch_6_energy_20_0
+    - sensor.aeotec_zw096_smart_switch_6_power_20_8
+    - sensor.aeotec_zw096_smart_switch_6_previous_reading_20_1
+    - sensor.aeotec_zw096_smart_switch_6_voltage_20_16
+
+door_windows:
+  name: Door & Windows
+  entities:
+    - sensor.front_door
+    - sensor.back_door
+    - sensor.garage_door
+    - binary_sensor.bedroom_motion
+    - binary_sensor.bedroom_window_left
+    - binary_sensor.bedroom_window_right
+    - binary_sensor.den_motion
+    - binary_sensor.dining_room_window
+    - binary_sensor.entry_door
+    - binary_sensor.front_bedroom_window
+    - binary_sensor.bathroom_window
+    - binary_sensor.office_window
+    - binary_sensor.rear_garage_door
+
+tampers:
+  name: Tampers
+  entities:
+    - sensor.aeotec_dsb29_doorwindow_sensor_2nd_edition_alarm_level_17_1
+    - sensor.aeotec_dsb29_doorwindow_sensor_2nd_edition_alarm_level_18_1
+    - sensor.aeotec_dsb29_doorwindow_sensor_2nd_edition_alarm_type_17_0
+    - sensor.aeotec_dsb29_doorwindow_sensor_2nd_edition_alarm_type_18_0
+    - sensor.vision_zg8101_garage_door_detector_alarm_level_14_1
+    - sensor.vision_zg8101_garage_door_detector_alarm_type_14_0
+    - sensor.vision_zg8101_garage_door_detector_burglar_14_10
+    - zwave.aeotec_dsb29_doorwindow_sensor_2nd_edition_17
+    - zwave.aeotec_dsb29_doorwindow_sensor_2nd_edition_18
+    - zwave.vision_zg8101_garage_door_detector_14
+    - sensor.vision_zg8101_garage_door_detector_sourcenodeid_14_2
+
+ecobee:
+  name: ecobeee
+  entities:
+    - binary_sensor.bedroom_occupancy
+    - binary_sensor.kingdombee_occupancy
+    - climate.kingdombee
+    - sensor.bedroom_temperature
+    - sensor.kingdombee_humidity
+    - sensor.kingdombee_temperature
+
+living_room_lights:
+  name: Living Room
+  entities:
+    - switch.aeotec_zw096_smart_switch_6_switch_20_0
+    - light.ge_12729_3way_dimmer_switch_level_9_0
+    - light.living_room_lamp
+    - switch.fluxer
+
+outside_lights:
+  name: Outside
+  entities:
+    - light.aeotec_dsc27103_micro_dimmer_2nd_edition_level_10_0
+    - switch.ge_12720_outdoor_smart_switch_switch_11_0
+
+living_tv:
+  name: Media
+  control: hidden
+  entities:
+    - switch.tv
+    - switch.apple
+    - switch.sonos
+    - switch.pool_sonos
+    - switch.bedroom_sonos
+
+bloomdata:
+  name: BloomSky
+  entities:
+    - sensor.kingdom_bloom_humidity
+    - sensor.kingdom_bloom_luminance
+    - sensor.kingdom_bloom_pressure
+    - sensor.kingdom_bloom_temperature
+    - sensor.kingdom_bloom_uvindex
+    - sensor.kingdom_bloom_voltage
+    - sensor.kingdombee_humidity
+    - sensor.kingdombee_temperature
+    - binary_sensor.kingdom_bloom_night
+    - binary_sensor.kingdom_bloom_rain
+    - camera.kingdom_bloom
+    - sun.sun
+    
+all_devices:
+  name: All all_devices
+  entities:
+    - device_tracker.ryanphone_ryanphone
+    - device_tracker.lizphone_lizphone
+
+automation:
+  name: automation
+  entities:
+    - automation.house_empty_shutdown
+    - automation.liz_arrive_alone_day
+    - automation.liz_arrive_alone_night
+    - automation.liz_arrive_garage
+    - automation.liz_leave_garage
+    - automation.ryan_arrive_alone_day
+    - automation.ryan_arrive_alone_night
+    - automation.ryan_arrive_garage
+    - automation.ryan_leave_garage
+    - automation.turn_off_the_house
+    - automation.turn_on_lights_when_sun_sets
+    - automation.turn_on_the_house
+    - automation.hue_light_on_gradually_with_alarm
+
+bedroom_lights:
+  name: Bedroom
+  entities:
+    - light.nightstand_left
+    - light.nightstand_right
+
+kitchen_lights:
+  name: Kitchen
+  entities:
+    - switch.ge_12727_inwall_smart_switch_toggle_switch_15_0
+    - light.entry_light
+
+controls:
+  name: Controls
+  control: hidden
+  entities:
+    - switch.garageactive
+    - input_boolean.goodnight
+    - input_boolean.vacation_mode
+
+scripts:
+  name: Scripts 
+  entities:
+    - script.empty_house
+    - script.garage_activate
+    - script.goodnight_house
+    - script.liz_arrive_alone_day
+    - script.liz_arrive_alone_night
+    - script.ryan_arrive_alone_day
+    - script.ryan_arrive_alone_night
+    - script.wake_up
+    - script.backup
+
+alarm_clock:
+  name: 'Alarm Clock'
+  entities:
+    - sensor.alarm_clock_time
+    - input_slider.alarm_clock_hour
+    - input_slider.alarm_clock_minute
+    - input_boolean.alarm_clock_status
+
+batteries:
+  name: 'Batteries'
+  entities:
+    - sensor.ryan_battery
+    - sensor.liz_battery
+    - sensor.thekingdometh
+
+links:
+  name: 'Links'
+  entities:
+    - weblink.router
+    - weblink.grafana
+    - weblink.hass
+    - weblink.kingdom_box
+

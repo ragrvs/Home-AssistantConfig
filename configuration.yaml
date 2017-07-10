@@ -1,0 +1,184 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret latitude
+  longitude: !secret longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 135
+  # metric for Metric, imperial for Imperial
+  unit_system: imperial
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: !secret timezone
+  customize: !include customize.yaml 
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+  # Uncomment this to add a password (recommended!)
+  api_password: !secret api_password
+  ssl_certificate: /etc/letsencrypt/live/exokingdom.duckdns.org/fullchain.pem
+  ssl_key: /etc/letsencrypt/live/exokingdom.duckdns.org/privkey.pem
+  # Uncomment this if you are using SSL or running in Docker etc
+  base_url: https://exokingdom.duckdns.org
+
+# Checks for available updates
+updater:
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time.
+history:
+  include:
+    domains:
+      - sensor
+      - switch
+      - media_player
+      - device_tracker
+      - light
+      - remote
+  exclude:
+    entities:
+      - device_tracker.iphone
+      - device_tracker.username_ryanphone
+      - sensor.aeotec_zw100_multisensor_6_ultraviolet_19_27
+      - ensor.aeotec_zw100_multisensor_6_burglar_19_10
+      - sensor.kingdom_bloom_uvindex
+      - sensor.aeotec_dsb09104_home_energy_meter_exporting_13_32
+      - sensor.aeotec_dsb09104_home_energy_meter_exporting_13_32_2
+      - sensor.aeotec_dsb09104_home_energy_meter_exporting_13_32_3
+      - sensor.aeotec_zw100_multisensor_6_alarm_type_19_0
+      - sensor.aeotec_zw100_multisensor_6_alarm_level_19_1
+
+# View all events in a logbook
+logbook:
+
+# Track the sun
+sun:
+
+ios:
+
+# Text to speech
+tts:
+  platform: google
+
+zone:
+  name: Home
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  radius: 150
+
+zone 2:
+  name: Base
+  latitude: !secret ryan_latitude
+  longitude: !secret ryan_longitude
+  radius: 2000
+
+zone 3:
+  name: Work
+  latitude: !secret liz_latitude
+  longitude: !secret liz_longitude
+  radius: 200  
+
+device_tracker:
+  - platform: owntracks
+    max_gps_accuracy: 200
+
+weblink:
+  entities:
+    - name: Router
+      url: http://192.168.1.5/
+    - name: Grafana
+      url: http://192.168.1.78:3000/?orgId=1
+    - name: HASS
+      url: https://home-assistant.io/
+    - name: Kingdom Box
+      url: https://192.168.1.78:10000/?dashboard
+
+
+mqtt:
+  broker: 127.0.0.1
+  port: !secret mqtt_port
+  client_id: HA1
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+
+influxdb:
+  host: 127.0.0.1
+
+input_slider: 
+  alarm_clock_hour:
+    name: Hour
+    icon: mdi:timer
+    initial: 6
+    min: 0
+    max: 23
+    step: 1
+  alarm_clock_minute:
+    name: Minutes
+    icon: mdi:timer
+    initial: 0
+    min: 0
+    max: 55
+    step: 5
+
+camera:
+  - platform: amcrest
+    host: !secret camera_ip
+    username: !secret camera_user
+    password: !secret camera_pswd
+
+ecobee:
+  api_key: !secret ecobee_key
+
+light:
+  - platform: hue
+    host: !secret hue_host
+    allow_hue_groups: false
+
+bloomsky:
+  api_key: !secret bloom_key
+
+ifttt:
+  key: !secret ifttt_key
+
+media_player:
+  - platform: sonos
+    hosts: 
+      - 192.168.1.90
+      - 192.168.1.91
+      - 192.168.1.92
+
+remote:
+  - platform: harmony
+    name: living_room
+    host: !secret remote_host
+    activity: "-1"
+    scan_interval: 5
+
+zwave:
+  usb_path: /dev/ttyACM0
+  polling_interval: 30000
+  new_entity_ids: false
+
+
+switch: !include switch.yaml
+automation: !include automations.yaml
+group: !include groups.yaml
+script: !include script.yaml
+sensor: !include sensor.yaml
+binary_sensor: !include binary_sensor.yaml
+input_boolean: !include input_boolean.yaml
+
+
+
+
+

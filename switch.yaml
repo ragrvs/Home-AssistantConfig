@@ -1,0 +1,83 @@
+- platform: template
+  switches:
+    tv:
+      friendly_name: Xbox
+      value_template: "{{ is_state_attr('remote.living_room', 'current_activity', 'Xbox') or False }}"
+      turn_on:
+        service: remote.turn_on
+        entity_id: remote.living_room
+        data:
+          activity: "20692612"
+      turn_off:
+        service: remote.turn_off
+        entity_id: remote.living_room
+    sonos:
+      friendly_name: Sonos
+      value_template: "{{ is_state_attr('remote.living_room', 'current_activity', 'Sonos') or False }}"
+      turn_on:
+        service: remote.turn_on
+        entity_id: remote.living_room
+        data:
+          activity: "20788486"
+      turn_off:
+        service: remote.turn_off
+        entity_id: remote.living_room
+    apple:
+      friendly_name: Apple TV
+      value_template: "{{ is_state_attr('remote.living_room', 'current_activity', 'Watch Apple TV') or False }}"
+      turn_on:
+        service: remote.turn_on
+        entity_id: remote.living_room
+        data:
+          activity: "21971322"
+      turn_off:
+        service: remote.turn_off
+        entity_id: remote.living_room
+    pool_sonos:
+      friendly_name: Pool Sonos
+      value_template: "{{ is_state_attr('remote.living_room', 'current_activity', 'Pool Sonos') or False }}"
+      turn_on:
+        service: remote.turn_on
+        entity_id: remote.living_room
+        data:
+          activity: "20788548"
+      turn_off:
+        service: remote.turn_off
+        entity_id: remote.living_room
+    bedroom_sonos:
+      friendly_name: Bedroom Sonos
+      value_template: "{{ is_state_attr('remote.living_room', 'current_activity', 'Bedroom Sonos') or False }}"
+      turn_on:
+        service: remote.turn_on
+        entity_id: remote.living_room
+        data:
+          activity: "20788766"
+      turn_off:
+        service: remote.turn_off
+        entity_id: remote.living_room
+
+- platform: mqtt
+  name: "Garage"
+  command_topic: "HA/garage/set"
+  payload_on: "ON"
+  payload_off: "OFF"
+  optimistic: false
+  qos: 0
+  retain: true
+
+- platform: template
+  switches:
+    garageactive:
+      friendly_name: Garage Open/Close
+      value_template: "{{ is_state('binary_sensor.vision_zg8101_garage_door_detector_sensor_22_0', 'on') }}"
+      turn_on: 
+        service: script.garage_activate
+      turn_off:
+        service: script.garage_activate    
+
+- platform: flux
+  lights: light.living_room_lamp
+  name: Fluxer
+  brightness: 100
+
+

@@ -1,0 +1,21 @@
+
+### Update HASS
+sudo su -s /bin/bash homeassistant
+source /srv/homeassistant/bin/activate
+pip3 install --upgrade homeassistant
+
+### Push to Github
+cd /home/homeassistant/.homeassistant
+sudo ./gitupdate.sh
+
+username: ragrvs
+paswd: 15!%
+
+### Stop HASS
+sudo systemctl stop home-assistant.service
+
+### Start HASS
+sudo systemctl start home-assistant.service
+
+### Restart HASS
+sudo systemctl restart home-assistant.service

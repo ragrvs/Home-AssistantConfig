@@ -1,0 +1,12 @@
+goodnight:
+    name: Goodnight
+    initial: off
+
+alarm_clock_status:
+  name: Wake Me Up
+  initial: off
+  icon: mdi:alarm-check
+  
+vacation_mode:
+  name: Vacation
+  initial: off

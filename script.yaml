@@ -1,0 +1,265 @@
+goodnight_house:
+  sequence:
+    - service: homeassistant.turn_off
+      entity_id:
+        - group.outside_lights
+        - group.living_room_lights
+        - light.entry_light
+        - switch.ge_12727_inwall_smart_switch_toggle_switch_15_0
+    - service: media_player.sonos_unjoin
+      entity_id: media_player.master_bedroom
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.master_bedroom
+        volume_level: .02
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.master_bedroom
+        source: 'Liquid Mind Radio'
+    - service: media_player.sonos_set_sleep_timer
+      data:
+        entity_id: media_player.master_bedroom
+        sleep_time: 3600
+    - service: remote.turn_off
+      entity_id: remote.living_room
+    - service: light.turn_on
+      data:
+        entity_id: light.nightstand_right
+        brightness: 30
+    - delay: 00:04:00
+    - service: light.turn_off
+      entity_id: light.nightstand_right
+
+empty_house:
+  sequence:
+    - service: homeassistant.turn_off
+      entity_id:
+        - switch.ge_12727_inwall_smart_switch_toggle_switch_15_0
+        - switch.aeotec_zw096_smart_switch_6_switch_20_0
+        - light.ge_12729_3way_dimmer_switch_level_9_0
+        - light.living_room_lamp
+        - light.entry_light
+        - light.nightstand_left
+        - light.nightstand_right
+    - service: media_player.media_stop
+      entity_id:
+        - media_player.family_room
+        - media_player.garage
+        - media_player.master_bedroom
+    - service: remote.turn_off
+      entity_id: remote.living_room
+    - service: climate.set_away_mode
+      entity_id: climate.kingdombee
+      data:
+        away_mode: on
+
+liz_arrive_alone_day:
+  sequence:
+    - service: light.turn_on
+      entity_id: light.entry_light
+    - service: remote.turn_on
+      entity_id: remote.living_room
+      data:
+        activity: "20788486"
+    - service: media_player.sonos_join 
+      data:
+        master: media_player.family_room
+        entity_id:
+          - media_player.garage
+          - media_player.master_bedroom
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.master_bedroom
+        volume_level: .3
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.garage
+        volume_level: .3
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.family_room
+        volume_level: .6
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.family_room
+        source: 'Bad Things Radio'
+    - delay: 00:04:00
+    - service: media_player.sonos_unjoin
+      entity_id:
+        - media_player.master_bedroom
+        - media_player.garage
+    - delay: 00:04:00
+    - service: media_player.media_pause
+      entity_id: media_player.family_room
+    - service: remote.turn_on
+      entity_id: remote.living_room
+      data:
+        activity: "20692612"
+    - service: climate.set_away_mode
+      entity_id: climate.kingdombee
+      data:
+        away_mode: off
+
+liz_arrive_alone_night:
+  sequence:
+    - service: homeassistant.turn_on
+      entity_id:
+        - switch.ge_12727_inwall_smart_switch_toggle_switch_15_0
+        - light.ge_12729_3way_dimmer_switch_level_9_0
+        - light.living_room_lamp
+        - light.entry_light
+        - light.nightstand_left
+        - light.nightstand_right
+    - service: remote.turn_on
+      entity_id: remote.living_room
+      data:
+        activity: "20788486"
+    - service: media_player.sonos_join 
+      data:
+        master: media_player.family_room
+        entity_id:
+          - media_player.garage
+          - media_player.master_bedroom
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.master_bedroom
+        volume_level: .3
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.garage
+        volume_level: .3
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.family_room
+        volume_level: .6
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.family_room
+        source: 'Bad Things Radio'
+    - delay: 00:04:00
+    - service: media_player.sonos_unjoin
+      entity_id:
+        - media_player.master_bedroom
+        - media_player.garage
+    - delay: 00:04:00
+    - service: media_player.media_pause
+      entity_id: media_player.family_room
+    - service: climate.set_away_mode
+      entity_id: climate.kingdombee
+      data:
+        away_mode: off
+
+ryan_arrive_alone_day:
+  sequence:
+    - service: light.turn_on
+      entity_id: light.entry_light
+    - service: remote.turn_on
+      entity_id: remote.living_room
+      data:
+        activity: "20788486"
+    - service: media_player.sonos_join 
+      data:
+        master: media_player.family_room
+        entity_id:
+          - media_player.garage
+          - media_player.master_bedroom
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.master_bedroom
+        volume_level: .3
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.garage
+        volume_level: .3
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.family_room
+        volume_level: .6
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.family_room
+        source: 'The Glitch Mob Radio'
+    - delay: 00:04:00
+    - service: media_player.sonos_unjoin
+      entity_id:
+        - media_player.master_bedroom
+        - media_player.garage
+    - delay: 00:04:00
+    - service: media_player.media_pause
+      entity_id: media_player.family_room
+    - service: remote.turn_on
+      entity_id: remote.living_room
+      data:
+        activity: "20692612"
+    - service: climate.set_away_mode
+      entity_id: climate.kingdombee
+      data:
+        away_mode: off
+
+ryan_arrive_alone_night:
+  sequence:
+    - service: homeassistant.turn_on
+      entity_id:
+        - switch.ge_12727_inwall_smart_switch_toggle_switch_15_0
+        - light.ge_12729_3way_dimmer_switch_level_9_0
+        - light.living_room_lamp
+        - light.entry_light
+        - light.nightstand_left
+        - light.nightstand_right
+    - service: remote.turn_on
+      entity_id: remote.living_room
+      data:
+        activity: "20788486"
+    - service: media_player.sonos_join 
+      data:
+        master: media_player.family_room
+        entity_id:
+          - media_player.garage
+          - media_player.master_bedroom
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.master_bedroom
+        volume_level: .3
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.garage
+        volume_level: .3
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.family_room
+        volume_level: .6
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.family_room
+        source: 'The Glitch Mob Radio'
+    - delay: 00:04:00
+    - service: media_player.sonos_unjoin
+      entity_id:
+        - media_player.master_bedroom
+        - media_player.garage
+    - delay: 00:04:00
+    - service: media_player.media_pause
+      entity_id: media_player.family_room
+    - service: climate.set_away_mode
+      entity_id: climate.kingdombee
+      data:
+        away_mode: off
+
+garage_activate:
+  sequence:
+    - service: switch.turn_on
+      entity_id: switch.garage
+    - delay: 00:00:01
+    - service: switch.turn_off
+      entity_id: switch.garage
+
+set_light_brightness_by_percent:
+  alias: Set light brightness by percent
+  sequence:
+    - service: homeassistant.turn_on
+      data_template:
+        entity_id: '{{ entity_id }}'
+        brightness: '{{ brightness | multiply(2.55) | int }}'
+
+
+

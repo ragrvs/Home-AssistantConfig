@@ -1,0 +1,379 @@
+- alias: Turn on lights when sun sets
+  trigger:
+    platform: sun
+    event: sunset
+    offset: "-00:15:00"
+  action:
+    service: homeassistant.turn_on
+    entity_id: group.outside_lights
+
+- alias: Turn off the house
+  trigger:
+    platform: state
+    entity_id: input_boolean.goodnight
+    from: 'off'
+    to: 'on'
+  action:
+    service: script.goodnight_house
+
+- alias: Turn on the house
+  trigger:
+    platform: sun
+    event: sunrise
+  action:
+    service: input_boolean.turn_off
+    entity_id: input_boolean.goodnight
+
+- alias: House empty shutdown
+  trigger:
+    platform: state
+    entity_id: group.all_devices
+    to: "not_home"
+  action:
+    service: script.empty_house
+
+- alias: Liz arrive alone night
+  trigger:
+    platform: zone
+    entity_id: device_tracker.lizphone_lizphone
+    zone: zone.home
+    event: enter
+  condition:
+    condition: and
+    conditions:
+      - condition: numeric_state
+        entity_id: sun.sun
+        value_template: '{{ state.attributes.elevation }}'
+        above: 3.5
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: device_tracker.ryanphone_ryanphone
+            state: 'not_home'
+          - condition: state
+            entity_id: device_tracker.ryanphone_ryanphone
+            state: 'base'
+  action:
+    service: script.liz_arrive_alone_day
+
+- alias: Liz arrive alone night
+  trigger:
+    platform: zone
+    entity_id: device_tracker.lizphone_lizphone
+    zone: zone.home
+    event: enter
+  condition:
+    condition: and
+    conditions:
+      - condition: numeric_state
+        entity_id: sun.sun
+        value_template: '{{ state.attributes.elevation }}'
+        below: 3.5
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: device_tracker.ryanphone_ryanphone
+            state: 'not_home'
+          - condition: state
+            entity_id: device_tracker.ryanphone_ryanphone
+            state: 'base'
+  action:
+    service: script.liz_arrive_alone_night
+
+- alias: Ryan arrive alone day
+  trigger:
+    platform: zone
+    entity_id: device_tracker.ryanphone_ryanphone
+    zone: zone.home
+    event: enter
+  condition:
+    condition: and
+    conditions:
+      - condition: numeric_state
+        entity_id: sun.sun
+        value_template: '{{ state.attributes.elevation }}'
+        above: 3.5
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: device_tracker.lizphone_lizphone
+            state: 'not_home'
+          - condition: state
+            entity_id: device_tracker.lizphone_lizphone
+            state: 'work'
+  action:
+    service: script.ryan_arrive_alone_day
+
+- alias: Ryan arrive alone night
+  trigger:
+    platform: zone
+    entity_id: device_tracker.ryanphone_ryanphone
+    zone: zone.home
+    event: enter
+  condition:
+    condition: and
+    conditions:
+      - condition: numeric_state
+        entity_id: sun.sun
+        value_template: '{{ state.attributes.elevation }}'
+        below: 3.5
+      - condition: or
+        conditions:
+          - condition: state
+            entity_id: device_tracker.lizphone_lizphone
+            state: 'not_home'
+          - condition: state
+            entity_id: device_tracker.lizphone_lizphone
+            state: 'work'
+  action:
+    service: script.ryan_arrive_alone_night
+
+- alias: Ryan arrive garage
+  trigger:
+    platform: zone
+    entity_id: device_tracker.ryanphone_ryanphone
+    zone: zone.home
+    event: enter
+  condition:
+    condition: state
+    entity_id: binary_sensor.vision_zg8101_garage_door_detector_sensor_22_0
+    state: 'off'
+  action:
+    service: script.garage_activate
+
+- alias: Liz arrive garage
+  trigger:
+    platform: zone
+    entity_id: device_tracker.lizphone_lizphone
+    zone: zone.home
+    event: enter
+  condition:
+    condition: state
+    entity_id: binary_sensor.vision_zg8101_garage_door_detector_sensor_22_0
+    state: 'off'
+  action:
+    service: script.garage_activate
+
+- alias: Ryan leave garage
+  trigger:
+    platform: zone
+    entity_id: device_tracker.ryanphone_ryanphone
+    zone: zone.work
+    event: leave
+  condition:
+    condition: state
+    entity_id: binary_sensor.vision_zg8101_garage_door_detector_sensor_22_0
+    state: 'on'
+  action:
+    service: script.garage_activate
+
+- alias: Liz leave garage
+  trigger:
+    platform: zone
+    entity_id: device_tracker.lizphone_lizphone
+    zone: zone.home
+    event: leave
+  condition:
+    condition: state
+    entity_id: binary_sensor.vision_zg8101_garage_door_detector_sensor_22_0
+    state: 'on'
+  action:
+    service: script.garage_activate
+
+- alias: Garage at goodnight
+  trigger:
+    platform: state
+    entity_id: input_boolean.goodnight
+    from: 'off'
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: binary_sensor.vision_zg8101_garage_door_detector_sensor_22_0
+    state: 'on'
+  action: 
+    service: script.garage_activate
+
+- alias: Entry Light 
+  trigger: 
+    platform: state
+    entity_id: binary_sensor.aeotec_zw100_multisensor_6_sensor_19_0
+    to: 'on'
+  action: 
+    - service: light.turn_on
+      entity_id: light.entry_light
+      data:
+        transition: 1
+        brightness: 225
+    - delay: 00:04:00
+    - service: homeassistant.turn_off
+      entity_id: light.entry_light
+
+- alias: Liz leave work
+  hide_entity: false
+  trigger:
+    platform: zone
+    entity_id: device_tracker.lizphone_lizphone
+    zone: zone.work
+    event: leave
+  action:
+    service: notify.ios_exo_phone
+    data_template:
+      message: "Liz left work!"
+
+- alias: 'Hue light on gradually with alarm'
+  hide_entity: False
+  trigger:
+    platform: template
+    value_template: '{{ states.sensor.time.state == states.sensor.alarm_clock_time_long.state }}'
+  condition:
+    condition: state
+    entity_id: input_boolean.alarm_clock_status
+    state: 'on'
+  action:
+    - service: light.turn_on
+      data: 
+        entity_id: light.nightstand_right
+        brightness: 1
+    - service: light.turn_on
+      data:
+        entity_id: light.nightstand_right
+        brightness: 130
+        transition: 20
+    - service: media_player.sonos_unjoin
+      entity_id:
+        - media_player.master_bedroom
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.master_bedroom
+        volume_level: .3
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.master_bedroom
+        source: 'Play NPR One'
+    - service: input_boolean.turn_off
+      data:
+        entity_id: input_boolean.alarm_clock_status
+
+- alias: 'Bedroom Lights on with motion'
+  hide_entity: False
+  trigger:
+    platform: state
+    entity_id: binary_sensor.bedroom_motion
+    to: 'on'
+  condition:
+    condition: and
+    conditions:
+      - condition: sun
+        after : sunset
+        after_offset: "-00:15:00"
+      - condition: state
+        entity_id: input_boolean.goodnight
+        state: 'off'
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: group.bedroom_lights
+        brightness: 30
+        transition: 1
+    - delay: 00:04:00
+    - service: light.turn_off
+      entity_id: group.bedroom_lights
+
+- alias: 'Living Room Late Night Walk'
+  hide_entity: False
+  trigger:
+    platform: state
+    entity_id: binary_sensor.den_motion
+    to: 'on'
+  condition:
+    condition: state
+    entity_id: input_boolean.goodnight
+    state: 'on'
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.ge_12729_3way_dimmer_switch_level_9_0
+        brightness: 100
+        transition: 1
+    - delay: 00:01:00
+    - service: light.turn_off
+      entity_id: light.ge_12729_3way_dimmer_switch_level_9_0
+
+- alias: 'Outside Lights Off'
+  hide_entity: False
+  trigger:
+    platform: time
+    at: '00:45:00'
+  action:
+    service: homeassistant.turn_off
+    entity_id: group.outside_lights
+
+- alias: 'Update notifications'
+  trigger:
+    - platform: state
+      entity_id: updater.updater
+  action:
+    service: notify.ios_exo_phone
+    data_template:
+      message: "There is a new Home Assistant release available."
+
+
+- alias: 'Security Alert'
+  trigger:
+    - platform: state
+      entity_id: sensor.front_door
+      to: 'Open'
+    - platform: state
+      entity_id: sensor.back_door
+      to: 'Open'
+    - platform: state
+      entity_id: sensor.garage_door
+      to: 'Open'
+    - platform: state
+      entity_id: binary_sensor.bedroom_motion
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.bedroom_window_left
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.bedroom_window_right
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.den_motion
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.dining_room_window
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.entry_door
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.front_bedroom_window
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.bathroom_window
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.office_window
+      to: 'on'
+    - platform: state
+      entity_id: binary_sensor.rear_garage_door
+      to: 'on'
+  condition:
+    condition: state
+    entity_id: group.all_devices
+    state: "not_home"
+  action:
+    - service: notify.ios_exo_phone
+      data_template:
+        message: "Alarm has been triggered."
+    - service: notify.ios_liz_phone
+      data_template:
+        message: "Alarm has been triggered."
+
+
+
+
+
+
+

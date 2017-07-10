@@ -1,0 +1,115 @@
+- platform: yr
+
+- platform: bloomsky
+  monitored_conditions:
+    - Temperature
+    - Humidity
+    - Pressure
+    - UVIndex
+    - Luminance
+    - Voltage
+
+- platform: darksky
+  api_key: e4aecae0b715d492a1e0b67c492f9306
+  monitored_conditions:
+    - summary
+    - icon
+    - nearest_storm_distance
+
+- platform: etherscan
+  address: '0x6B0a475d00f0460f39E30C4e4f9ebc32cECCf7cE'
+  name: 'theKingdom.eth' 
+
+- platform: template
+  sensors:
+    garage_door:
+      value_template: >-
+        {% if states.binary_sensor.vision_zg8101_garage_door_detector_sensor_22_0.state == 'on' %}
+          Open
+        {% elif states.binary_sensor.vision_zg8101_garage_door_detector_sensor_22_0.state == 'off' %}
+          Closed
+        {% else %}
+          n/a
+        {% endif %}
+
+- platform: template
+  sensors:
+    front_door:
+      value_template: >-
+        {% if states.binary_sensor.aeotec_dsb29_doorwindow_sensor_2nd_edition_sensor_17_0.state == 'on' %}
+          Open
+        {% elif states.binary_sensor.aeotec_dsb29_doorwindow_sensor_2nd_edition_sensor_17_0.state == 'off' %}
+          Closed
+        {% else %}
+          n/a
+        {% endif %}
+
+- platform: template
+  sensors:
+    back_door:
+      value_template: >-
+        {% if states.binary_sensor.aeotec_dsb29_doorwindow_sensor_2nd_edition_sensor_18_0.state == 'on' %}
+          Open
+        {% elif states.binary_sensor.aeotec_dsb29_doorwindow_sensor_2nd_edition_sensor_18_0.state == 'off' %}
+          Closed
+        {% else %}
+          n/a
+        {% endif %}
+
+- platform: template
+  sensors:
+    multi_sensor:
+      value_template: "{{ is_state('binary_sensor.vision_zg8101_garage_door_detector_sensor_22_0', 'on') }}"
+
+- platform: time_date
+  display_options:
+    - 'time'
+- platform: template
+  sensors:
+    alarm_clock_hour:
+      value_template: '{{ states.input_slider.alarm_clock_hour.state | int }}'
+    alarm_clock_minute:
+      value_template: '{{ states.input_slider.alarm_clock_minute.state | int }}'
+    alarm_clock_time: 
+      value_template: >- 
+        {{ states.sensor.alarm_clock_hour.state }}:
+        {%- if states.sensor.alarm_clock_minute.state|length == 1 -%}
+          0
+        {%- endif -%}
+          {{ states.sensor.alarm_clock_minute.state }}
+    alarm_clock_time_long:
+      value_template: >-
+        {% if states.sensor.alarm_clock_hour.state|length == 1 -%}
+          0
+        {%- endif -%}
+          {{ states.sensor.alarm_clock_hour.state }}:
+        {%- if states.sensor.alarm_clock_minute.state|length == 1 -%}
+          0
+        {%- endif -%}
+          {{ states.sensor.alarm_clock_minute.state }}
+
+- platform: template
+  sensors:
+    ryan_battery:
+      friendly_name: "Ryan's Battery"
+      unit_of_measurement: '%'
+      value_template: >
+          {%- if states.device_tracker.exo_phone.attributes.battery %}
+              {{ states.device_tracker.exo_phone.attributes.battery|round }}
+          {% else %}
+              {{ states.sensor.ryan_battery.state }}
+          {%- endif %}
+      icon_template: '{%- if is_state("sensor.ryan_battery", "unknown") %}mdi:battery-unknown{%- elif is_state_attr("device_tracker.exo_phone", "battery_status", "Charging") %}mdi:battery-charging{%- elif  states.device_tracker.exo_phone.attributes.battery <= 5 %}mdi:battery-outline{%- elif states.device_tracker.exo_phone.attributes.battery >= 95 %}mdi:battery{% else %}mdi:battery-{{(states.device_tracker.exo_phone.attributes.battery|float / 10)|round*10}}{%- endif %}'
+
+- platform: template
+  sensors:
+    liz_battery:
+      friendly_name: Liz's Battery
+      unit_of_measurement: '%'
+      value_template: >
+          {%- if states.device_tracker.liz_phone.attributes.battery %}
+              {{ states.device_tracker.liz_phone.attributes.battery|round }}
+          {% else %}
+              {{ states.sensor.liz_battery.state }}
+          {%- endif %}
+      icon_template: '{%- if is_state("sensor.liz_battery", "unknown") %}mdi:battery-unknown{%- elif is_state_attr("device_tracker.liz_phone", "battery_status", "Charging") %}mdi:battery-charging{%- elif  states.device_tracker.liz_phone.attributes.battery <= 5 %}mdi:battery-outline{%- elif states.device_tracker.liz_phone.attributes.battery >= 95 %}mdi:battery{% else %}mdi:battery-{{(states.device_tracker.liz_phone.attributes.battery|float / 10)|round*10}}{%- endif %}'
